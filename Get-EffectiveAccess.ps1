@@ -61,9 +61,9 @@ $GUID = @{}
 $exportPath = "$env:USERPROFILE\Documents\ACLs\"
 $domain = Get-ADRootDSE
 $switches = @{
-    generic = $(cat "$psscriptroot\genericExclude.txt")
+    generic = $(cat "$psscriptroot\switchGroups\genericExclude.txt")
     orphan = "S-1-*"
-    iamman = $(cat "$psscriptroot\iamGroups.txt")
+    iamman = $(cat "$psscriptroot\switchGroups\iamGroups.txt")
     }
 }#End of Begin {} block.
 
