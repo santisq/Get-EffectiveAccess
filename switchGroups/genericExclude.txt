@@ -1,1 +1,0 @@
-NT AUTHORITY|SVC|CREATOR OWNER|DOMAIN ADMINS|KEY ADMINS|OWNER RIGHTS|BUILTIN|Exchange Enterprise Servers|Exchange Servers|Exchange Recipient Administrators|Delegated Setup|Enterprise Admins|Exchange Trusted Subsystem|Exchange Windows Permissions|Organization Management|RTCUniversalUserAdmins|RTCUniversalUserReadOnlyGroup
