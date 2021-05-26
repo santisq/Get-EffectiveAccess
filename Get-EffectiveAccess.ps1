@@ -1,4 +1,4 @@
-﻿Function Get-EffectiveAccess {
+Function Get-EffectiveAccess {
 [CmdletBinding()]
 param(
     [Parameter(
@@ -16,7 +16,6 @@ param(
         # requires -Modules ActiveDirectory
         $ErrorActionPreference = 'Stop'
         $GUIDMap = @{}
-        $result = [system.collections.generic.list[pscustomobject]]::new()
         $domain = Get-ADRootDSE
         $z = '00000000-0000-0000-0000-000000000000'
         $hash = @{
@@ -37,21 +36,26 @@ param(
 
         foreach($i in $schemaIDs)
         {
-            $GUIDMap.add([System.GUID]$i.schemaIDGUID,$i.name)
+            if(-not $GUIDMap.ContainsKey([System.GUID]$i.schemaIDGUID))
+            {
+                $GUIDMap.add([System.GUID]$i.schemaIDGUID,$i.name)
+            }
         }
         foreach($i in $extendedRigths)
         {
-            $GUIDMap.add([System.GUID]$i.rightsGUID,$i.name)
+            if(-not $GUIDMap.ContainsKey([System.GUID]$i.rightsGUID))
+            {
+                $GUIDMap.add([System.GUID]$i.rightsGUID,$i.name)
+            }
         }
     }
 
     process
     {
-        
+        $result = [system.collections.generic.list[pscustomobject]]::new()
         $object = Get-ADObject $DistinguishedName
         $acls = (Get-ACL "AD:$object").Access
         
-
         foreach($acl in $acls)
         {
             
@@ -64,7 +68,7 @@ param(
                 $GUIDMap[$acl.ObjectType]
             }
 
-            $inheritedObjType = ($acl.InheritedObjectType -eq $z)
+            $inheritedObjType = if($acl.InheritedObjectType -eq $z)
             {
                 'Applied to Any Inherited Object'
             }
@@ -75,6 +79,7 @@ param(
 
             $result.Add(
                 [PSCustomObject]@{
+                    Name = $object.Name
                     IdentityReference = $acl.IdentityReference
                     AccessControlType = $acl.AccessControlType
                     ActiveDirectoryRights = $acl.ActiveDirectoryRights
