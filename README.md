@@ -15,3 +15,7 @@ PS \> $effectiveAccess = Get-ADGroup exampleGroup | Get-EffectiveAccess -Include
 ### Requirements
 - PowerShell v5.1
 - ActiveDirectory PS Module
+
+### EXAMPLE OUTPUT WITH Out-GridView
+
+![exampleoutput](/effectiveAccess.png?raw=true)
