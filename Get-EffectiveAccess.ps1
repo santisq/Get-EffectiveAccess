@@ -4,14 +4,15 @@ $ErrorActionPreference = 'Stop'
 function Get-EffectiveAccess {
 [CmdletBinding()]
 param(
-[Parameter(
-    Mandatory,
-    ValueFromPipelineByPropertyName
-)]
-[ValidatePattern(
-    '(?:(CN=([^,]*)),)?(?:((?:(?:CN|OU)=[^,]+,?)+),)?((?:DC=[^,]+,?)+)$'
-)][string]$DistinguishedName,
-[switch]$IncludeOrphan
+    [Parameter(
+        Mandatory,
+        ValueFromPipelineByPropertyName
+    )]
+    [ValidatePattern(
+        '(?:(CN=([^,]*)),)?(?:((?:(?:CN|OU)=[^,]+,?)+),)?((?:DC=[^,]+,?)+)$'
+    )]
+    [string]$DistinguishedName,
+    [switch]$IncludeOrphan
 )
 
     begin {
@@ -62,14 +63,14 @@ param(
             )[$acl.InheritedObjectType -eq $z]
 
             [PSCustomObject]@{
-                Name = $object.Name
-                IdentityReference = $acl.IdentityReference
-                AccessControlType = $acl.AccessControlType
+                Name                  = $object.Name
+                IdentityReference     = $acl.IdentityReference
+                AccessControlType     = $acl.AccessControlType
                 ActiveDirectoryRights = $acl.ActiveDirectoryRights
-                ObjectType = $objType
-                InheritedObjectType = $inheritedObjType
-                InheritanceType = $acl.InheritanceType
-                IsInherited = $acl.IsInherited
+                ObjectType            = $objectType
+                InheritedObjectType   = $inheritedObjType
+                InheritanceType       = $acl.InheritanceType
+                IsInherited           = $acl.IsInherited
             }
         }
         
