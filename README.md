@@ -5,7 +5,7 @@ Gets the ACL of an object and translate it to readable data.
 
 ### USAGE
 ```
-PS \> Get-ADOrganizationalUnit -Filter {Name -eq 'ExampleOU'} | Get-EffectiveAccess | Out-GridView
+PS \> Get-ADOrganizationalUnit -Filter "Name -eq 'ExampleOU'" | Get-EffectiveAccess | Out-GridView
 PS \> Get-EffectiveAccess -DistinguishedName 'OU=ExampleOU,DC=domainName,DC=com' | Out-GridView
 PS \> $effectiveAccess = Get-ADGroup exampleGroup | Get-EffectiveAccess -IncludeOrphan
 PS \> Get-ADOrganizationalUnit -Filter * | Select -First 10 | Get-EffectiveAccess | Out-GridView
