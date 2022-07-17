@@ -10,7 +10,7 @@ function Get-EffectiveAccess {
     begin {
         $GUIDMap = @{}
         $domain  = Get-ADRootDSE
-        $guid    = [guid]::new([byte[]]::new(16))
+        $guid    = [guid]::Empty
         $hash    = @{
             SearchBase  = $domain.schemaNamingContext
             LDAPFilter  = '(schemaIDGUID=*)'
