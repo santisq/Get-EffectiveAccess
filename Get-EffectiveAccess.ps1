@@ -41,7 +41,7 @@ function Get-EffectiveAccess {
 
     process {
         try {
-            $object = Get-ADObject $DistinguishedName
+            $object = Get-ADObject $Identity
             $acls   = (Get-ACL "AD:$object").Access
 
             foreach($acl in $acls) {
