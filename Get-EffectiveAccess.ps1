@@ -3,7 +3,7 @@ function Get-EffectiveAccess {
     param(
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [ValidatePattern('(?:(CN=([^,]*)),)?(?:((?:(?:CN|OU)=[^,]+,?)+),)?((?:DC=[^,]+,?)+)$')]
-        [alias('ObjectGUID', 'ObjectSID', 'DistinguishedName')]
+        [alias('DistinguishedName')]
         [string] $Identity,
 
         [parameter()]
