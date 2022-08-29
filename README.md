@@ -20,6 +20,13 @@ Get-ADOrganizationalUnit -Filter "Name -eq 'ExampleOU'" |
 Get-EffectiveAccess -Identity 'OU=ExampleOU,DC=domainName,DC=com' | Out-GridView
 ```
 
+- Get the _Effective Access_ of the Organizational Unit named `ExampleOU` on a Trusted Domain:
+
+```sh
+Get-ADOrganizationalUnit -Filter "Name -eq 'ExampleOU'" -Server trustedDomain |
+    Get-EffectiveAccess -Server trustedDomain | Out-GridView
+```
+
 - Store the _Effective Access_ of the group named `exampleGroup` in a variable:
 
 ```powershell
