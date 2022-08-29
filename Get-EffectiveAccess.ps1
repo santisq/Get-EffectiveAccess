@@ -3,29 +3,45 @@ function Get-EffectiveAccess {
     param(
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [ValidatePattern('(?:(CN=([^,]*)),)?(?:((?:(?:CN|OU)=[^,]+,?)+),)?((?:DC=[^,]+,?)+)$')]
-        [alias('ObjectGUID','ObjectSID','DistinguishedName','sAMAccountName')]
-        [string] $Identity
+        [alias('ObjectGUID', 'ObjectSID', 'DistinguishedName')]
+        [string] $Identity,
+
+        [parameter()]
+        [alias('Domain')]
+        [string] $Server
     )
 
     begin {
-        $GUIDMap = @{}
-        $domain  = Get-ADRootDSE
         $guid    = [guid]::Empty
-        $hash    = @{
+        $GUIDMap = @{}
+
+        if($PSBoundParameters.ContainsKey('Server')) {
+            $domain = Get-ADRootDSE -Server $Server
+        }
+        else {
+            $domain = Get-ADRootDSE
+        }
+
+        $params = @{
             SearchBase  = $domain.schemaNamingContext
             LDAPFilter  = '(schemaIDGUID=*)'
             Properties  = 'name', 'schemaIDGUID'
             ErrorAction = 'SilentlyContinue'
         }
-        $schemaIDs = Get-ADObject @hash
-
-        $hash = @{
-            SearchBase  = "CN=Extended-Rights,$($domain.configurationNamingContext)"
-            LDAPFilter  = '(objectClass=controlAccessRight)'
-            Properties  = 'name', 'rightsGUID'
-            ErrorAction = 'SilentlyContinue'
+        $adObjParams = @{
+            Properties = 'nTSecurityDescriptor'
         }
-        $extendedRigths = Get-ADObject @hash
+
+        if($PSBoundParameters.ContainsKey('Server')) {
+            $params['Server']  = $Server
+            $adObjParams['Server'] = $Server
+        }
+        $schemaIDs = Get-ADObject @params
+
+        $params['SearchBase'] = "CN=Extended-Rights,$($domain.configurationNamingContext)"
+        $params['LDAPFilter'] = '(objectClass=controlAccessRight)'
+        $params['Properties'] = 'name', 'rightsGUID'
+        $extendedRigths = Get-ADObject @params
 
         foreach($i in $schemaIDs) {
             if(-not $GUIDMap.ContainsKey([guid] $i.schemaIDGUID)) {
@@ -41,10 +57,10 @@ function Get-EffectiveAccess {
 
     process {
         try {
-            $object = Get-ADObject $Identity
-            $acls   = (Get-ACL "AD:$object").Access
+            $adObjParams['Identity'] = $Identity
+            $object = Get-ADObject @adObjParams
 
-            foreach($acl in $acls) {
+            foreach($acl in $object.nTSecurityDescriptor.Access) {
                 if($guid.Equals($acl.ObjectType)) {
                     $objectType = 'All Objects (Full Control)'
                 }
