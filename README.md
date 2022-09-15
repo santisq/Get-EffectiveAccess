@@ -2,7 +2,7 @@
 
 ## Description
 
-PowerShell function that tries to give a friendly translatation of [`Get-Acl`](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/get-acl?view=powershell-7.2) into human readable data. The function is designed exclusively for Active Directory, and requires the [__ActiveDirectory Module__](https://docs.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2022-ps).
+PowerShell function that tries to give a friendly translation of [`Get-Acl`](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/get-acl?view=powershell-7.2) into human readable data. The function is designed exclusively for Active Directory, and requires the [__ActiveDirectory Module__](https://docs.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2022-ps).
 
 ## Examples
 
